@@ -188,6 +188,8 @@ public class AddAlarm extends AppCompatActivity
 
                             db.addPendingIntent_OFF(GAlarm_on, alarmID_to_off);
                             db.addTime_OFF(GAlarm_on, time);
+                            Intent i1 = new Intent(AddAlarm.this,Home.class);
+                            startActivity(i1);
 
                     }
 

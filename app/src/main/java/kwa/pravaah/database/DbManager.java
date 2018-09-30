@@ -231,6 +231,7 @@ public class DbManager extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT "+ PENDING_INTENT_ON +" FROM " + TABLE_SMS, null);
 
+
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
