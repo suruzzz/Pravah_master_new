@@ -3,6 +3,7 @@ package kwa.pravaah;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -19,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -30,8 +32,10 @@ public class CancelAlarm extends AppCompatActivity
 
     Spinner spinner;
     DbManager db;
-    List<String> rows;
-    ArrayAdapter<String> dataAdapter;
+    List<Integer> rows;
+    ArrayAdapter<Integer> dataAdapter;
+    TextView tv;
+    String item;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +53,7 @@ public class CancelAlarm extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        tv= findViewById(R.id.tV2);
         db = new DbManager(getApplicationContext());
 
         spinner = (Spinner) findViewById(R.id.spinner);
@@ -61,15 +66,23 @@ public class CancelAlarm extends AppCompatActivity
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              // String ON = db.getPendingON(String.valueOf(spinner.getSelectedItem()));
-               String OFF = db.getPendingOFF(String.valueOf(spinner.getSelectedItem()));
-               cancelAlarm(String.valueOf(spinner.getSelectedItem()));
-              // cancelAlarm(OFF);
-             db.deleteRow(String.valueOf(spinner.getSelectedItem()));
-                Toast.makeText(CancelAlarm.this,"Alarm deleted Succesfully!!!", Toast.LENGTH_LONG).show();
-                loadSpinnerData();
-                Intent i2 = new Intent(CancelAlarm.this,Home.class);
-                startActivity(i2);
+
+                Cursor cursor=db.getPendingIntent(item);
+                if(cursor.getCount()!=0) {
+
+                    cursor.moveToFirst();
+                    String Pending_intent_to_on = cursor.getString(cursor.getColumnIndex(db.PENDING_INTENT_ON));
+                    String Pending_intent_to_off = cursor.getString(cursor.getColumnIndex(db.PENDING_INTENT_OFF));
+
+
+                    cancelAlarm(Pending_intent_to_on);
+                    cancelAlarm(Pending_intent_to_off);
+                    db.deleteRow(String.valueOf(spinner.getSelectedItem()));
+                    Toast.makeText(CancelAlarm.this, "Alarm deleted Succesfully!!!", Toast.LENGTH_LONG).show();
+                    loadSpinnerData();
+                    Intent i2 = new Intent(CancelAlarm.this, Home.class);
+                    startActivity(i2);
+                }
             }
         });
 
@@ -114,8 +127,8 @@ public class CancelAlarm extends AppCompatActivity
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         // On selecting a spinner item
-        String item = parent.getItemAtPosition(position).toString();
-
+         item = parent.getItemAtPosition(position).toString();
+        tv.setText(item);
         // Showing selected spinner item
         Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
 
@@ -132,7 +145,7 @@ public class CancelAlarm extends AppCompatActivity
          rows = db.getDetails();
 
         // Creating adapter for spinner
-         dataAdapter = new ArrayAdapter<String>(this,
+         dataAdapter = new ArrayAdapter<Integer>(this,
                 android.R.layout.simple_spinner_item, rows);
 
         // Drop down layout style - list view with radio button

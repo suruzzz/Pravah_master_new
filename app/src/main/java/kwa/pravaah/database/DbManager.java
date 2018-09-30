@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +24,8 @@ public class DbManager extends SQLiteOpenHelper {
     public static final String EVENTHRS = "eventhrs";
     public static final String AUTO = "auto";
     public static final String TM = "tm";
-    public static final String PENDING_INTENT_ON="alarmid1";
-    public static final String PENDING_INTENT_OFF="alarmid2";
+    public static  String PENDING_INTENT_ON="alarmid1";
+    public static  String PENDING_INTENT_OFF="alarmid2";
     public static final String TIME_ON = "time_on";
     public static final String TIME_OFF = "time_off";
 
@@ -38,7 +37,7 @@ public class DbManager extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        db.execSQL("create table " + TABLE_SMS + "(" + ID+" integer primary key ,"
+        db.execSQL("create table " + TABLE_SMS + "(" + ID+" integer primary key autoincrement ,"
                 + MOBILE_NO + " text,"
                 + NAME + " text,"
                 + POWER + " text,"
@@ -148,13 +147,18 @@ public class DbManager extends SQLiteOpenHelper {
 
     public String getPendingON(String no) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select " + PENDING_INTENT_ON + " from " + TABLE_SMS + " where " + PENDING_INTENT_ON + " = " + "'" + no + "'" , null);
+        Cursor res = db.rawQuery("select " + PENDING_INTENT_ON + " from " + TABLE_SMS + " where " + PENDING_INTENT_ON + " = " +  no, null);
         return PENDING_INTENT_ON;
     }
     public String getPendingOFF(String no) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select " + PENDING_INTENT_OFF + " from " + TABLE_SMS + " where " + PENDING_INTENT_ON + " = " + "'" + no + "'" , null);
+        Cursor res = db.rawQuery("select " + PENDING_INTENT_OFF + " from " + TABLE_SMS + " where " + PENDING_INTENT_ON + " = " + no , null);
         return PENDING_INTENT_OFF;
+    }
+    public Cursor getPendingIntent(String no) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("select "+PENDING_INTENT_ON + " , " + PENDING_INTENT_OFF + " from " + TABLE_SMS + " where " + ID + " = " + no , null);
+        return res;
     }
 
     public void updatePumpStatus(String no, String pump) {
@@ -207,7 +211,7 @@ public class DbManager extends SQLiteOpenHelper {
     public void deleteRow(String data)
     {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("delete from " + TABLE_SMS+ " WHERE "+PENDING_INTENT_ON+"='"+data+"'");
+        db.execSQL("delete from " + TABLE_SMS+ " WHERE "+ID+"='"+data+"'");
         db.close();
     }
 
@@ -224,18 +228,18 @@ public class DbManager extends SQLiteOpenHelper {
     }
 
 
-    public List<String> getDetails(){
-        List<String> rows = new ArrayList<String>();
+    public List<Integer> getDetails(){
+        List<Integer> rows = new ArrayList<Integer>();
 
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT "+ PENDING_INTENT_ON +" FROM " + TABLE_SMS, null);
+        Cursor cursor = db.rawQuery("SELECT "+ ID +" FROM " + TABLE_SMS, null);
 
 
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
-                rows.add(cursor.getString(0));
+                rows.add(cursor.getInt(0));
             } while (cursor.moveToNext());
         }
 

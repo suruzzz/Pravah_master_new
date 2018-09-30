@@ -130,12 +130,7 @@ public class AddAlarm extends AppCompatActivity
                     }
                     else
                     {
-                      /*  if (db.getnumber(num) == true) {
-                            db.addPendingIntent_ON(num, alarmID_to_on);
-                            db.addTime_ON(num,time);
-                        } else {*/
                         db.insertUserDetails(num,Name, POWERON, PUMPOFF, alarmID_to_on,"", "", "", "", "", intent_off,time,time_off);
-                        // }
 
                     }
                 }
