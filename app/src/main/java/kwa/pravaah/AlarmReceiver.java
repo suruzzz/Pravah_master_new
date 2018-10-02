@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import kwa.pravaah.database.DbManager;
@@ -16,6 +17,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     private static final String TAG = "KWATest: AlarmReceiver";
     private String POWER="ON";
     String number;
+
     @Override
     public void onReceive(Context context, Intent intent) {
         // TODO: This method is called when the BroadcastReceiver is receiving
@@ -48,6 +50,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                     Toast.makeText(context, "Pump ON", Toast.LENGTH_SHORT).show();
 
                     AppUtils.dial(No, context);
+
 
                 }
 

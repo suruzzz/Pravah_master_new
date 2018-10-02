@@ -9,11 +9,10 @@ import android.widget.Toast;
 
 public class MessageReceiver extends BroadcastReceiver {
 
+
     @Override
-    public void onReceive(Context context, Intent intent) {
-        // TODO: This method is called when the BroadcastReceiver is receiving
-        // an Intent broadcast.
-        //throw new UnsupportedOperationException("Not yet implemented");
+    public void onReceive(Context context, Intent intent)
+    {
 
         ///---get the SMS message passed in---
         Bundle bundle = intent.getExtras();
@@ -34,9 +33,5 @@ public class MessageReceiver extends BroadcastReceiver {
             //---display the new SMS message---
             Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
         }
-
-
-
-
     }
 }

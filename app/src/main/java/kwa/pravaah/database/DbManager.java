@@ -15,17 +15,13 @@ public class DbManager extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "KWA.db";
     public static final String TABLE_SMS = "sms_table";
     public static final String ID="id";
+    public static final String SL_NO = "sl_no";
     public static final String MOBILE_NO = "phone";
     public static final String NAME = "name";
     public static final String POWER = "power";
     public static final String PUMP = "pump";
-    public static final String MODE = "mode";
-    public static final String ERR = "err";
-    public static final String EVENTHRS = "eventhrs";
-    public static final String AUTO = "auto";
-    public static final String TM = "tm";
-    public static  String PENDING_INTENT_ON="alarmid1";
-    public static  String PENDING_INTENT_OFF="alarmid2";
+    public static final String PENDING_INTENT_ON="alarmid1";
+    public static final String PENDING_INTENT_OFF="alarmid2";
     public static final String TIME_ON = "time_on";
     public static final String TIME_OFF = "time_off";
 
@@ -42,11 +38,6 @@ public class DbManager extends SQLiteOpenHelper {
                 + NAME + " text,"
                 + POWER + " text,"
                 + PUMP + " text,"
-                + MODE + " text,"
-                + ERR + " text,"
-                + EVENTHRS + " text,"
-                + AUTO + " text,"
-                + TM + " text,"
                 + PENDING_INTENT_ON +" text,"
                 + PENDING_INTENT_OFF +" text,"
                 + TIME_ON +" text unique,"
@@ -56,6 +47,7 @@ public class DbManager extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
+
     }
 
     public int numOfRows() {
@@ -64,7 +56,6 @@ public class DbManager extends SQLiteOpenHelper {
         return numOfRows;
     }
     public boolean insertUserDetails(String no,String name,String power, String pump, String indent_to_on,
-                                     String mode, String err, String eventhrs, String auto, String tm,
                                      String intent_to_off, String time_on, String time_off) {
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -74,11 +65,6 @@ public class DbManager extends SQLiteOpenHelper {
         contentValues.put(NAME, name);
         contentValues.put(POWER, power);
         contentValues.put(PUMP, pump);
-        contentValues.put(MODE, mode);
-        contentValues.put(ERR, err);
-        contentValues.put(EVENTHRS, eventhrs);
-        contentValues.put(AUTO, auto);
-        contentValues.put(TM, tm);
         contentValues.put(PENDING_INTENT_ON, indent_to_on);
         contentValues.put(PENDING_INTENT_OFF, intent_to_off);
         contentValues.put(TIME_ON, time_on);
@@ -87,29 +73,13 @@ public class DbManager extends SQLiteOpenHelper {
         db.insert(TABLE_SMS, null, contentValues);
         return true;
     }
-    public boolean UpdateDetails(String no,String name,String power, String pump, String indent_to_on,
-                                 String mode, String err, String eventhrs, String auto, String tm,
-                                 String intent_to_off, String time_on, String time_off)
+    public boolean UpdateDetails(String no,String power, String pump)
     {
-
         SQLiteDatabase db = this.getWritableDatabase();
-
         ContentValues contentValues = new ContentValues();
-        contentValues.put(MOBILE_NO, no);
-        contentValues.put(NAME, name);
         contentValues.put(POWER, power);
         contentValues.put(PUMP, pump);
-        contentValues.put(MODE, mode);
-        contentValues.put(ERR, err);
-        contentValues.put(EVENTHRS, eventhrs);
-        contentValues.put(AUTO, auto);
-        contentValues.put(TM, tm);
-        contentValues.put(PENDING_INTENT_ON, indent_to_on);
-        contentValues.put(PENDING_INTENT_OFF, intent_to_off);
-        contentValues.put(TIME_ON, time_on);
-        contentValues.put(TIME_OFF, time_off);
-
-        db.update(TABLE_SMS,contentValues,MOBILE_NO+"="+no + "and"+ PENDING_INTENT_ON + "="+indent_to_on,null);
+        db.update(TABLE_SMS,contentValues, MOBILE_NO + "=" + no,null);
         return true;
 
     }
@@ -223,23 +193,23 @@ public class DbManager extends SQLiteOpenHelper {
 
     public Cursor viewData() {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select "+NAME +","  +POWER +"," +PUMP +"," +TIME_ON +"," +TIME_OFF + " from " + TABLE_SMS , null);
+        Cursor res = db.rawQuery("select "+ID +"," +NAME +","  +POWER +"," +PUMP +"," +TIME_ON +"," +TIME_OFF + " from " + TABLE_SMS , null);
         return res;
     }
 
 
-    public List<Integer> getDetails(){
-        List<Integer> rows = new ArrayList<Integer>();
+    public List<String> getDetails(){
+        List<String> rows = new ArrayList<String>();
 
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT "+ ID +" FROM " + TABLE_SMS, null);
+        Cursor cursor = db.rawQuery("SELECT "+ ID +","+NAME+" FROM " + TABLE_SMS, null);
 
 
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
-                rows.add(cursor.getInt(0));
+                rows.add(cursor.getString(0));
             } while (cursor.moveToNext());
         }
 
