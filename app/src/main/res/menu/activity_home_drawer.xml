@@ -16,8 +16,15 @@
             android:id="@+id/nav_Cancel"
             android:icon="@drawable/alarm_off"
             android:title="Cancel" />
+        <item
+            android:id="@+id/nav_gsheet"
+            android:icon="@drawable/sheet"
+            android:title="Google Sheet" />
+
+
 
     </group>
+
 
     <item android:title="Communicate">
         <menu>

@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -35,6 +36,7 @@ public class Home extends AppCompatActivity
     private static final int PHONE_REQUEST = 101;
     private static final int SMS_REQUEST = 102;
     private static final int RECEIVE_SMS_REQUEST = 103;
+
 
 
     private TableLayout tableLayout;
@@ -76,7 +78,7 @@ public class Home extends AppCompatActivity
                     while (cursor.moveToNext()) {
 
 
-                        // String number_str = cursor.getString(cursor.getColumnIndex(db.MOBILE_NO));
+                         String id_str = cursor.getString(cursor.getColumnIndex(db.ID));
                         String name_str = cursor.getString(cursor.getColumnIndex(db.NAME));
                         String power_str = cursor.getString(cursor.getColumnIndex(db.POWER));
                         String pump_str = cursor.getString(cursor.getColumnIndex(db.PUMP));
@@ -84,14 +86,16 @@ public class Home extends AppCompatActivity
                         String off_str = cursor.getString(cursor.getColumnIndex(db.TIME_OFF));
 
                         View tableRow = LayoutInflater.from(this).inflate(R.layout.content_home, null, false);
-                        //  TextView Num = (TextView) tableRow.findViewById(R.id.Number);
+
+
+                        TextView id = (TextView) tableRow.findViewById(R.id.id);
                         TextView Name = (TextView) tableRow.findViewById(R.id.name);
                         TextView Power = (TextView) tableRow.findViewById(R.id.power);
                         TextView Pump = (TextView) tableRow.findViewById(R.id.pump);
                         TextView ON = (TextView) tableRow.findViewById(R.id.ON);
                         TextView OFF = (TextView) tableRow.findViewById(R.id.OFF);
 
-                        //  Num.setText(number_str.toString());
+                          id.setText(id_str.toString());
                         Name.setText(name_str.toString());
                         Power.setText(power_str.toString());
                         Pump.setText(pump_str.toString());
@@ -195,12 +199,9 @@ public class Home extends AppCompatActivity
     }
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
+        System.gc();
+        System.exit(0);
+
     }
 
 
@@ -222,6 +223,12 @@ public class Home extends AppCompatActivity
             startActivity(i1);
         } else if (id == R.id.nav_share) {
 
+        } else if (id == R.id.nav_gsheet) {
+             String url ="https://docs.google.com/spreadsheets/d/1Cntx7-iHTVpE2ePqkh-QcrR1iT4Y_kT7f7xRMXKbPVQ/edit#gid=0";
+
+            Uri uriUrl = Uri.parse(url);
+            Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+            startActivity(launchBrowser);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

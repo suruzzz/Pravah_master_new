@@ -43,11 +43,16 @@
         <receiver
             android:name=".SMSListener"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
         <receiver
             android:name=".MessageReceiver"
             android:enabled="true"
-            android:exported="true"></receiver>
+            android:exported="true" />
+
     </application>
 
 </manifest>

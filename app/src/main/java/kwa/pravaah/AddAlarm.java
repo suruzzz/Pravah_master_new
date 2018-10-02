@@ -106,7 +106,7 @@ public class AddAlarm extends AppCompatActivity
                     Intent myIntent = new Intent(AddAlarm.this, AlarmReceiver.class);
 
                     String num = Phone.getText().toString();
-                    String PhNo = num+",1";
+                    String PhNo = num+",2";
                     myIntent.putExtra("Number", PhNo);
 
                     int alarmID = (int) cal.getTimeInMillis();
@@ -116,7 +116,7 @@ public class AddAlarm extends AppCompatActivity
                     assert manager != null;
                     //manager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
 
-                    manager.setRepeating(AlarmManager.RTC_WAKEUP,cal.getTimeInMillis(),AlarmManager.INTERVAL_DAY,pendingIntent);
+                    manager.setInexactRepeating(AlarmManager.RTC_WAKEUP,cal.getTimeInMillis(),AlarmManager.INTERVAL_DAY,pendingIntent);
 
                     Toast.makeText(AddAlarm.this, "Shift set", Toast.LENGTH_SHORT).show();
                     String alarmID_to_on= String.valueOf(alarmID);
@@ -125,12 +125,12 @@ public class AddAlarm extends AppCompatActivity
                     if(mFlag) {
 
 
-                        db.insertUserDetails(num,Name,POWERON , PUMPOFF, alarmID_to_on,"", "", "", "", "", intent_off,time,time_off);
+                        db.insertUserDetails(num,Name,POWERON , PUMPOFF, alarmID_to_on, intent_off,time,time_off);
 
                     }
                     else
                     {
-                        db.insertUserDetails(num,Name, POWERON, PUMPOFF, alarmID_to_on,"", "", "", "", "", intent_off,time,time_off);
+                        db.insertUserDetails(num,Name, POWERON, PUMPOFF, alarmID_to_on, intent_off,time,time_off);
 
                     }
                 }
@@ -166,7 +166,7 @@ public class AddAlarm extends AppCompatActivity
                         Intent myIntent = new Intent(AddAlarm.this, AlarmReceiver.class);
 
 
-                        String PhNo = num+",2";
+                        String PhNo = num+",3";
                         myIntent.putExtra("Number", PhNo);
 
                         int alarmID = (int) cal.getTimeInMillis();
@@ -174,7 +174,7 @@ public class AddAlarm extends AppCompatActivity
 
 
                         assert manager != null;
-                        manager.setRepeating(AlarmManager.RTC_WAKEUP,cal.getTimeInMillis(),AlarmManager.INTERVAL_DAY,pendingIntent);
+                        manager.setInexactRepeating(AlarmManager.RTC_WAKEUP,cal.getTimeInMillis(),AlarmManager.INTERVAL_DAY,pendingIntent);
 
 
                         Toast.makeText(AddAlarm.this, "Shift set", Toast.LENGTH_SHORT).show();
@@ -203,11 +203,8 @@ public class AddAlarm extends AppCompatActivity
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
+        System.gc();
+        System.exit(0);
 
     }
 
@@ -231,6 +228,12 @@ public class AddAlarm extends AppCompatActivity
 
         } else if (id == R.id.nav_share) {
 
+        } else if (id == R.id.nav_gsheet) {
+            String url ="https://docs.google.com/spreadsheets/d/1Cntx7-iHTVpE2ePqkh-QcrR1iT4Y_kT7f7xRMXKbPVQ/edit#gid=0";
+
+            Uri uriUrl = Uri.parse(url);
+            Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+            startActivity(launchBrowser);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
